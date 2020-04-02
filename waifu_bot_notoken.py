@@ -120,12 +120,20 @@ data5 = data4.encode('utf-8')
 #print(data4)
 #print(data3.split('.'))
 
+# For future use: this person does not exist
+PersonPage = "https://www.thispersondoesnotexist.com/image"
+Personresult = requests.get(PersonPage, headers={'User-Agent': 'Mozilla/5.0 (Platform; Security; OS-or-CPU; Localization; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)'})
+
+
 
 file = requests.get(Waifu_Url)
+#Commenting for april fools
 img = Image.open(BytesIO(file.content))
+#April fools: real life waifus
+#img = (Image.open(BytesIO(Personresult.content)))
 #img.show()
 img.save('temp.jpg')
-token=""
+#token=""
 
 def postToFacebook(token, message=data5):
 	graph = facebook.GraphAPI(token)
@@ -133,6 +141,6 @@ def postToFacebook(token, message=data5):
 	print(f"Successfully posted {post_id} to facebook")
 
 postToFacebook(token)
-
+#print(data5)
 print("testing", file=open("log.log", "a"))
 
