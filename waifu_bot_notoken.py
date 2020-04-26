@@ -40,11 +40,11 @@ text_number = randint(1, 125000)
 # TWDNE website is very intuitive. Every image is stored as integer.jpg
 # where integer is between 1 and 100,000
 Waifu_Url = "https://www.thiswaifudoesnotexist.net/example-"+str(waifu_number)+".jpg"
-print(Waifu_Url)
+print(Waifu_Url, file=open("waifu_bot_log.log", "a"))
 
 # Use the text_number for pulling text snippet
 Text_Url = "https://www.thiswaifudoesnotexist.net/snippet-"+str(text_number)+".txt"
-print(Text_Url)
+print(Text_Url, file=open("waifu_bot_log.log", "a"))
 
 # Here we use requests to get the text snippet
 data = requests.get(Text_Url)
@@ -76,29 +76,27 @@ upper_text_bound = (len(data3) - Number_of_Sentences - 1)
 
 # These were for testing only
 #upper_text_bound = 3
-print("upper_text_bound")
-print(upper_text_bound)
+print("upper_text_bound", file=open("waifu_bot_log.log", "a"))
+print(upper_text_bound, file=open("waifu_bot_log.log", "a"))
 
 # Lower bound is a random number between 1 and the upper text bound
 # So if we want three sentences, it will start between the first the third to last
 Lower_Bound = randint( 1, upper_text_bound)
-print("Lower_Bound")
-print(Lower_Bound)
+print("Lower_Bound", file=open("waifu_bot_log.log", "a"))
+print(Lower_Bound, file=open("waifu_bot_log.log", "a"))
 
 # True upper bound is the actual upper bound of the text we're pulling
 # So Lower bound is our start and true upper bound is the end
 True_Upper_Bound = Lower_Bound + Number_of_Sentences
-print("True_Upper_Bound")
-print(True_Upper_Bound)
-
+print("True_Upper_Bound", file=open("waifu_bot_log.log", "a"))
+print(True_Upper_Bound, file=open("waifu_bot_log.log", "a"))
 
 # Here, we create a blank string object known as data4
 data4 = ""
 
 # We have to create a function to easily append the sentences to the string
 
-print('data 3 as a string')
-
+print('data 3 as a string', file=open("waifu_bot_log.log", "a"))
 
 # Now, each sentence is pulled from the data3 variable, given punctuation,
 # and appended to the data4 string
@@ -109,38 +107,37 @@ for i in range(Lower_Bound,True_Upper_Bound):
 	#data4.append(str((data3[i]))+'.')
 	#print(str((data3[i],'.')).replace(' .','.'))
 
-
 #print(data2)
 # To fix the ellipses
-#print('data4')
-#print(data4)
-#print(data4)
 data4 = str(data4).replace( 'ELLIPSES' , '...' )
 data5 = data4.encode('utf-8')
-#print(data4)
-#print(data3.split('.'))
 
 # For future use: this person does not exist
 PersonPage = "https://www.thispersondoesnotexist.com/image"
 Personresult = requests.get(PersonPage, headers={'User-Agent': 'Mozilla/5.0 (Platform; Security; OS-or-CPU; Localization; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)'})
 
 
-
+# Use requests.get on the waifu page to pull the current waifu
 file = requests.get(Waifu_Url)
 #Commenting for april fools
 img = Image.open(BytesIO(file.content))
 #April fools: real life waifus
 #img = (Image.open(BytesIO(Personresult.content)))
 #img.show()
-img.save('temp.jpg')
-#token=""
+# I save the image for testing purposes, but this may not strictly be necessary. I think it's easier with the graph API though
+img.save('waifu.jpg')
+# This token will be blank on github to prevent people from posting to my facebook page
+token=""
 
+# Here we define the function to post to facebook using the facebook graph api. 
 def postToFacebook(token, message=data5):
 	graph = facebook.GraphAPI(token)
-	post_id = graph.put_photo(image = open('temp.jpg', 'rb'), message = message)["post_id"]
-	print(f"Successfully posted {post_id} to facebook")
+	post_id = graph.put_photo(image = open('waifu.jpg', 'rb'), message = message)["post_id"]
+	print(f"Successfully posted {post_id} to facebook", file=open("waifu_bot_log.log", "a"))
 
+# Finally, we execute the function to actually post
 postToFacebook(token)
-#print(data5)
-print("testing", file=open("log.log", "a"))
+# Print the current date to the log and we're done!
+nowdate= datetime.datetime.now()
+print(nowdate, file=open("waifu_bot_log.log", "a"))
 
